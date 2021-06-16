@@ -1,0 +1,32 @@
+{
+    "development": {
+        "host": "127.0.0.1",
+        "port": 9545,
+    	"network_id": "*"
+    },
+    "mainnet": {
+        "url": "https://mainnet.infura.io/v3",
+        "network_id": 1
+    },
+    "rinkeby": {
+        "url": "https://rinkeby.infura.io/v3",
+        "network_id": 4
+    },
+    "ropsten": {
+        "url": "https://ropsten.infura.io/v3",
+        "network_id": 3,
+        "network_check_timeout": 90000
+    },
+    "kovan": {
+        "url": "https://kovan.infura.io/v3",
+        "network_id": 42
+    },
+    "goerli": {
+        "url": "https://goerli.infura.io/v3",
+        "network_id": 5
+    },
+    "swissdlt": {
+        "url": "https://swissdlt.appswithlove.net/rpc",
+        "network_id": 999
+    }
+}

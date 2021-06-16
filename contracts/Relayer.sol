@@ -20,7 +20,7 @@ contract Relayer is EIP712 {
 
     mapping(address => uint256) private _nonces;
 
-    constructor() EIP712("AwlRelayer", "1.0.0") {}
+    constructor() EIP712("AwlRelayer", "0.0.1") {}
 
     function getNonce(address from) public view returns (uint256) {
         return _nonces[from];

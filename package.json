@@ -1,0 +1,25 @@
+{
+  "name": "metatx",
+  "version": "1.0.0",
+  "description": "A smart contract to enable meta-transactions on Ethereum.",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.1.0",
+    "@truffle/hdwallet-provider": "^1.2.3",
+    "truffle-plugin-verify": "^0.5.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.appswithlove.net/tooling/metatx.git"
+  },
+  "keywords": [],
+  "author": "Pascal Marco Caversaccio",
+  "license": "MIT"
+}
