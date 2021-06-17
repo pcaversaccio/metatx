@@ -35,7 +35,11 @@ let fnParams = web3.eth.abi.encodeParameters(
   ["address", "address", "uint256"],
   [fromAddr, toAddr, tokenValue]
 );
-calldata = fnSignature + fnParams.substr(2); // Add the encoded function parameters to the calldata
+
+// Add the encoded function parameters to the calldata
+// Also, remove the hex "0x" prefix for the encoded parameters since
+// the function signature already contains it
+calldata = fnSignature + fnParams.substr(2);
 
 console.log(calldata) // Output the calldata
 
