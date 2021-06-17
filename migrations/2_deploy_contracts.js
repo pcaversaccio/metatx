@@ -1,5 +1,5 @@
-const Relayer = artifacts.require("Relayer");
+const SimpleForwarder = artifacts.require("SimpleForwarder");
 
 module.exports = function (deployer) {
-  deployer.deploy(Relayer);
+  deployer.deploy(SimpleForwarder);
 };

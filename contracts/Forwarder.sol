@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// Further information: https://eips.ethereum.org/EIPS/eip-2770
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
@@ -8,12 +9,12 @@ contract Forwarder is EIP712 {
     using ECDSA for bytes32;
 
     struct ForwardRequest {
-        address from;
-        address to;
-        uint256 value;
-        uint256 gas;
-        uint256 nonce;
-        bytes data;
+        address from; // an externally-owned account making the request
+        address to; // a destination address, normally a smart-contract
+        uint256 value; // an amount of Ether to transfer to the destination
+        uint256 gas; // an amount of gas limit to set for the execution
+        uint256 nonce; // an on-chain tracked nonce of a transaction
+        bytes data; // the data to be sent to the destination
     }
 
     bytes32 private constant TYPEHASH = keccak256("ForwardRequest(address from,address to,uint256 value,uint256 gas,uint256 nonce,bytes data)");
