@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 
-contract Relayer is EIP712 {
+contract Forwarder is EIP712 {
     using ECDSA for bytes32;
 
     struct ForwardRequest {
@@ -20,7 +20,7 @@ contract Relayer is EIP712 {
 
     mapping(address => uint256) private _nonces;
 
-    constructor() EIP712("AwlRelayer", "0.0.1") {}
+    constructor() EIP712("AwlForwarder", "0.0.1") {}
 
     function getNonce(address from) public view returns (uint256) {
         return _nonces[from];
@@ -40,7 +40,7 @@ contract Relayer is EIP712 {
     }
 
     function execute(ForwardRequest calldata req, bytes calldata signature) public payable returns (bool, bytes memory) {
-        require(verify(req, signature), "AwlRelayer: signature does not match request");
+        require(verify(req, signature), "AwlForwarder: signature does not match request");
         _nonces[req.from] = req.nonce + 1;
 
         // solhint-disable-next-line avoid-low-level-calls
