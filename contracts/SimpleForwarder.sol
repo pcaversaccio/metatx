@@ -2,12 +2,31 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "hardhat/console.sol";
 
 contract SimpleForwarder {
   using ECDSA for bytes32;
   
   mapping(address => bool) private isWhitelisted;
-  
+
+
+  //-------------------------------------------------------
+  // FOR TESTING PURPOSES - TO BE DELETED LATER!
+  string greeting;
+  constructor(string memory _greeting) {
+    greeting = _greeting;
+    console.log(greeting);
+  }
+
+  function greet() public view returns (string memory) {
+    return greeting;
+  }
+
+  function setGreeting(string memory _greeting) public {
+    greeting = _greeting;
+  }
+  //-------------------------------------------------------
+
   // verify the data and execute the data at the target address
   function forward(address _to, bytes calldata _data, bytes memory _signature) external returns (bytes memory _result) {
     bool success;
