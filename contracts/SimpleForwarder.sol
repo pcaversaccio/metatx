@@ -2,7 +2,16 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+/**
+ * @dev For general development-related debugging, we implement Hardhat's console.log. 
+ * This import can be deleted for the final deployment.
+ */
 import "hardhat/console.sol";
+
+/**
+ * @title Forwarder Smart Contract
+ * @author Pascal Marco Caversaccio, pascal.caversaccio@hotmail.ch
+ */
 
 contract SimpleForwarder {
   using ECDSA for bytes32;

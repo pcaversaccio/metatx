@@ -1,15 +1,15 @@
 # Ethereum Meta-Transaction
-<p align="center">
+<figure align="center">
   <img src="assets/img/Awl_Logo.png" alt="Awl Logo" width="30%" />
-</p>
+</figure>
 
 ----------------------
 
 ## Background
-A *meta-transaction* is a regular Ethereum transaction which contains another transaction, the actual transaction. The actual transaction is signed by a user and then sent to an operator (e.g. [Awl](https://appswithlove.com)) or something similar; **no gas and blockchain interaction required**. The operator takes this signed transaction and submits it to the blockchain paying for the fees himself. The contract ensures there's a valid signature on the actual transaction and then executes it.
+A *meta-transaction* is a regular Ethereum transaction which contains another transaction, the actual transaction. The actual transaction is signed by a user and then sent to an operator (e.g. [Awl](https://appswithlove.com)) or something similar; **no gas and blockchain interaction required**. The operator takes this signed transaction and submits it to the blockchain paying for the fees himself. The contract ensures there's a valid signature on the actual transaction and then executes it:
 
 <figure align="center">
-  <img src="assets/img/metatx.png" alt="Meta-Transaction: Overview" width="70%"/>
+  <img src="assets/img/metatx.png" alt="Meta-Transaction: Overview" width="50%"/>
   <figcaption>In the case of an <a href="https://eips.ethereum.org/EIPS/eip-20" target="_blank"><em>ERC-20</em></a> transfer, the <em>Signer</em> needs to approve the <em>Proxy</em> contract to transfer tokens on its behalf.</figcaption>
 </figure>
 
@@ -26,8 +26,11 @@ bool isValidSignature = ecrecover(hash(transaction), v, r, s) == transaction.sig
 (bool didSucceed, bytes memory returnData) = address(this).delegatecall(transaction.data);
 ```
 
+## TO DOS
+- Implement `delegatecall` for `approve` call.
+
 ## Some Test Deployments
-- Rinkeby Deployment `Forwarder.sol`: [0x2b363DdED2DD246E7A9EA3ce2FbCa4eb5b3Ab8De](https://rinkeby.etherscan.io/address/0x2b363DdED2DD246E7A9EA3ce2FbCa4eb5b3Ab8De)
+- Rinkeby Deployment `Forwarder.sol`: [0xAA833F8a782d99B658e7192a75D62647C7661fA9](https://rinkeby.etherscan.io/address/0xAA833F8a782d99B658e7192a75D62647C7661fA9)
 - Rinkeby Deployment `SimpleForwarder.sol`: [0xF38f75f81E06d45D9675b3d0Ed7a354b9Bc67915](https://rinkeby.etherscan.io/address/0xF38f75f81E06d45D9675b3d0Ed7a354b9Bc67915)
   - First successful meta-transaction 😎: [0x688981e072c6222f3d826f648826700c3a963de09ac1f314dc2a666e730ff0ea](https://rinkeby.etherscan.io/tx/0x688981e072c6222f3d826f648826700c3a963de09ac1f314dc2a666e730ff0ea)
 
