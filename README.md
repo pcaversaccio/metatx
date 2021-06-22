@@ -53,6 +53,12 @@ Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `
 - Rinkeby Deployment `Forwarder.sol`: [0xba5b421D415054b08b7D1CeB7F0f790c35729c48](https://rinkeby.etherscan.io/address/0xba5b421D415054b08b7D1CeB7F0f790c35729c48)
   - First successful meta-transaction 😎: [0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217](https://rinkeby.etherscan.io/tx/0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217)
 
+## Tests
+As the project backbone, we use the [Truffle](https://github.com/trufflesuite/truffle) development environment. However, since [Hardhat](https://hardhat.org/) implements great features for Solidity debugging like Solidity stack traces, console.log, and explicit error messages when transactions fail, we leverage Hardhat for testing: 
+```
+npx hardhat test
+```
+
 ## TO DOS
 - Discuss smart contract design;
 - Elaborate on security considerations;
