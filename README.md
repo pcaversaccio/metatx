@@ -45,7 +45,7 @@ function approve(address spender, uint256 amount) public virtual override return
 ```
 Also, since our deployed token contracts do not inherit from the draft version of [`permit`](https://eips.ethereum.org/EIPS/eip-2612), the only way to deal with this challenge is to ask the user for a high enough `allowance` for the *Forwarder* contract at the beginning of the user journey. In order to assure a replay protection, we track on-chain a `nonce` mapping. Further, to prevent anyone from broadcasting transactions that have a potential malicious intent, the *Forwarder* contract implements a whitelist for the `execute` function.
 
-## Generate the `calldata`, `signature`, `struct` Data
+## Generate the `calldata`, `signature`, `struct` Data Using `web3.js`
 Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `struct` data.
 > `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
 
@@ -53,10 +53,10 @@ Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `
 - Rinkeby Deployment `Forwarder.sol`: [0xba5b421D415054b08b7D1CeB7F0f790c35729c48](https://rinkeby.etherscan.io/address/0xba5b421D415054b08b7D1CeB7F0f790c35729c48)
   - First successful meta-transaction 😎: [0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217](https://rinkeby.etherscan.io/tx/0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217)
 
-=> Before we can enable `transferFrom` meta-transactions for ERC20 tokens, the signer needs to call `approve` the `SimpleForwarder` contract to transfer tokens on it's behalf. This function call must be sent as a separate meta-transaction before the `transferFrom` function call to enable a successful transfer. Further checks need to be implemented who can whitelist addresses and who can execute the function `forward`.
-
 ## TO DOS
-- Write proper unit tests.
+- Discuss smart contract design;
+- Elaborate on security considerations;
+- Write proper unit tests;
 
 ## References
 [1] https://medium.com/coinmonks/ethereum-meta-transactions-101-de7f91884a06
