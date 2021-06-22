@@ -45,6 +45,11 @@ function approve(address spender, uint256 amount) public virtual override return
 ```
 Also, since our deployed token contracts do not inherit from the draft version of [`permit`](https://eips.ethereum.org/EIPS/eip-2612), the only way to deal with this challenge is to ask the user for a high enough `allowance` for the *Forwarder* contract at the beginning of the user journey. In order to assure a replay protection, we track on-chain a `nonce` mapping. Further, to prevent anyone from broadcasting transactions that have a potential malicious intent, the *Forwarder* contract implements a whitelist for the `execute` function.
 
+### UML Diagram `Forwarder` Smart Contract
+<figure align="center">
+  <img src="assets/img/UML_Diagram.png" alt="Awl Logo" width="40%" />
+</figure>
+
 ## Generate the `calldata`, `signature`, `struct` Data Using `web3.js`
 Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `struct` data.
 > `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
