@@ -18,7 +18,7 @@ If we want to support generalised meta-transactions in our contract, it can be d
 
 **Step 1:** Verify the signature of the meta-transaction. We can do this by either creating a hash following the [EIP-712](https://eips.ethereum.org/EIPS/eip-712) standard and `ecrecover`:
 ```solidity
-bool isValidSignature = ecrecover(hash(transaction), v, r, s) == transaction.signerAddress
+bool isValidSignature = ecrecover(hash(transaction), v, r, s) == transaction.signerAddress;
 ```
 or the more *old-fashioned* way:
 ```solidity
@@ -31,7 +31,7 @@ bool isValidSignature = keccak256(abi.encode(transaction.parameter)).toEthSigned
 ```
 
 Another approach would be to use directly the low-level call `call` with the token address (e.g. Startfeld's token address):
-```
+```solidity
 (bool didSucceed, bytes memory returnData) = transaction.tokenAddress.call(transaction.data);
 ```
 
