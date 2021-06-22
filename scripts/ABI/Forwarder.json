@@ -1,4 +1,28 @@
 [{
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+    }, {
+        "indexed": false,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+    }, {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+    }],
+    "name": "MetaTransaction",
+    "type": "event"
+}, {
     "anonymous": false,
     "inputs": [{
         "indexed": true,
@@ -14,6 +38,36 @@
     "name": "OwnershipTransferred",
     "type": "event"
 }, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+    }],
+    "name": "Paused",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+    }],
+    "name": "Unpaused",
+    "type": "event"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "_sender",
+        "type": "address"
+    }],
+    "name": "addSenderToWhitelist",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
     "inputs": [{
         "components": [{
             "internalType": "address",
@@ -23,10 +77,6 @@
             "internalType": "address",
             "name": "to",
             "type": "address"
-        }, {
-            "internalType": "uint256",
-            "name": "value",
-            "type": "uint256"
         }, {
             "internalType": "uint256",
             "name": "gas",
@@ -58,7 +108,7 @@
         "name": "",
         "type": "bytes"
     }],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
 }, {
     "inputs": [{
@@ -96,6 +146,16 @@
     "type": "function"
 }, {
     "inputs": [],
+    "name": "paused",
+    "outputs": [{
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -120,10 +180,6 @@
             "internalType": "address",
             "name": "to",
             "type": "address"
-        }, {
-            "internalType": "uint256",
-            "name": "value",
-            "type": "uint256"
         }, {
             "internalType": "uint256",
             "name": "gas",

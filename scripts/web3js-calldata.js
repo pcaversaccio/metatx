@@ -20,9 +20,8 @@ const web3 = new Web3(`https://rinkeby.infura.io/v3/${projectId}`); // Initiate 
 let fromAddr = '0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf';
 let toAddr = '0x9F3f11d72d96910df008Cfe3aBA40F361D2EED03'; // Target address of the transfer
 let daiTokenAddress = '0xc7ad46e0b8a400bb3c915120d284aafba8fc4735'; // Token smart contract address (e.g. Startfeld token address)
-let forwarderAddress = '0xAA833F8a782d99B658e7192a75D62647C7661fA9' // Forwarder smart contract address
+let forwarderAddress = '0xba5b421D415054b08b7D1CeB7F0f790c35729c48' // Forwarder smart contract address
 
-let ethValue = 0; // Amount of ETH transferred
 let gasLimit = new BigNumber(21000 * 10); // Amount of gas limit to set for the execution
 let nonce = 0; // Initiate the nonce
 
@@ -65,12 +64,12 @@ contract.methods.getNonce(fromAddr).call().then(data => {
   nonce = data;
   // Pack the token contract address and the `approve()`/`transferFrom()` calldata together and sign them
   let rawDataApprove = web3.eth.abi.encodeParameters(
-    ['address', 'address', 'uint256', 'uint256', 'uint256', 'bytes'],
-    [fromAddr, daiTokenAddress, ethValue, gasLimit, nonce, calldataApprove]
+    ['address', 'address', 'uint256', 'uint256', 'bytes'],
+    [fromAddr, daiTokenAddress, gasLimit, nonce, calldataApprove]
   );
   let rawDataTransfer = web3.eth.abi.encodeParameters(
-    ['address', 'address', 'uint256', 'uint256', 'uint256', 'bytes'],
-    [fromAddr, daiTokenAddress, ethValue, gasLimit, nonce, calldataTransfer]
+    ['address', 'address', 'uint256', 'uint256', 'bytes'],
+    [fromAddr, daiTokenAddress, gasLimit, nonce, calldataTransfer]
   );
 
   let hashApprove = web3.utils.soliditySha3(rawDataApprove); // Hash the `approve()` data
@@ -87,8 +86,8 @@ contract.methods.getNonce(fromAddr).call().then(data => {
   console.log('Recovered EOA address(`approve()`): ' + web3.eth.accounts.recover(signatureApprove), '\n'); // Output the recovered signer address
   console.log('Recovered EOA address(`transferFrom()`): ' + web3.eth.accounts.recover(signatureTransfer), '\n'); // Output the recovered signer address
 
-  console.log('Tuple data(`approve()`): ' + '[' + '"' + fromAddr + '"' + ', ' + '"' + daiTokenAddress + '"' + ', ' + '"' + ethValue + '"' + ', ' + '"' + gasLimit + '"' +
+  console.log('Tuple data(`approve()`): ' + '[' + '"' + fromAddr + '"' + ', ' + '"' + daiTokenAddress + '"' + ', ' + '"' + gasLimit + '"' +
     ', ' + '"' + nonce + '"' + ', ' + '"' + calldataApprove + '"' + ']'); // Output the complete ForwardRequest struct for `approve()`
-  console.log('Tuple data(`transferFrom()`): ' + '[' + '"' + fromAddr + '"' + ', ' + '"' + daiTokenAddress + '"' + ', ' + '"' + ethValue + '"' + ', ' + '"' + gasLimit + '"' +
+  console.log('Tuple data(`transferFrom()`): ' + '[' + '"' + fromAddr + '"' + ', ' + '"' + daiTokenAddress + '"' + ', ' + '"' + gasLimit + '"' +
     ', ' + '"' + nonce + '"' + ', ' + '"' + calldataTransfer + '"' + ']'); // Output the complete ForwardRequest struct for `transferFrom()`
 });

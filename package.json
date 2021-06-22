@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "author": "Pascal Marco Caversaccio",
-  "description": "A smart contract to enable meta-transactions on Ethereum.",
+  "description": "A smart contract to enable ERC-20 token meta-transactions on Ethereum.",
   "keywords": [
     "ethereum",
     "blockchain",

@@ -16,29 +16,47 @@ A *meta-transaction* is a regular Ethereum transaction which contains another tr
 ### General High-Level Overview
 If we want to support generalised meta-transactions in our contract, it can be done with a few simple steps. On a high-level, there are two steps to it.
 
-**Step 1:** Verify the signature of the meta-transaction. We can do this by creating a hash following the [EIP-712](https://eips.ethereum.org/EIPS/eip-712) standard and `ecrecover`:
+**Step 1:** Verify the signature of the meta-transaction. We can do this by either creating a hash following the [EIP-712](https://eips.ethereum.org/EIPS/eip-712) standard and `ecrecover`:
 ```solidity
 bool isValidSignature = ecrecover(hash(transaction), v, r, s) == transaction.signerAddress
 ```
+or the more *old-fashioned* way:
+```solidity
+bool isValidSignature = keccak256(abi.encode(transaction.parameter)).toEthSignedMessageHash().recover(signature) == transaction.signerAddress;
+```
 
-**Step 2:** Once verified, we can extract the actual transaction data. By using `delegatecall` on our current contract address, we execute a function in our current contract without doing a new contract call. Remember that `delegatecall` basically calls the contract's code but with the current contract's state. So by doing `address(this).delegatecall` we just execute all in our current contract and we can pass the transaction data along.
+**Step 2:** Once verified, we can extract the actual transaction data. One way would be by using `delegatecall` on our current contract address, we execute a function in our current contract without doing a new contract call. Remember that `delegatecall` basically calls the contract's code but with the current contract's state. So by doing `address(this).delegatecall` we just execute all in our current contract and we can pass the transaction data along:
 ```solidity
 (bool didSucceed, bytes memory returnData) = address(this).delegatecall(transaction.data);
 ```
 
-## TO DOS
-- Implement `delegatecall` for `approve` call.
+Another approach would be to use directly the low-level call `call` with the token address (e.g. Startfeld's token address):
+```
+(bool didSucceed, bytes memory returnData) = transaction.tokenAddress.call(transaction.data);
+```
 
-## Some Test Deployments
-- Rinkeby Deployment `Forwarder.sol`: [0xAA833F8a782d99B658e7192a75D62647C7661fA9](https://rinkeby.etherscan.io/address/0xAA833F8a782d99B658e7192a75D62647C7661fA9)
-- Rinkeby Deployment `SimpleForwarder.sol`: [0xF38f75f81E06d45D9675b3d0Ed7a354b9Bc67915](https://rinkeby.etherscan.io/address/0xF38f75f81E06d45D9675b3d0Ed7a354b9Bc67915)
-  - First successful meta-transaction 😎: [0x688981e072c6222f3d826f648826700c3a963de09ac1f314dc2a666e730ff0ea](https://rinkeby.etherscan.io/tx/0x688981e072c6222f3d826f648826700c3a963de09ac1f314dc2a666e730ff0ea)
+## Implementation Strategy
+As already mentioned above, in the case of an [ERC-20](https://eips.ethereum.org/EIPS/eip-20) transfer, the *Signer* needs to approve the *Forwarder* contract to transfer tokens on its behalf. We now face the challenge that e.g. OpenZeppelin's [`approve`](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol#L130) implementation internally sets the `msg.sender` as the owner of the function call. In our case, this would mean that the *Forwarder* contract grants itself an `allowance`.
+```solidity
+function approve(address spender, uint256 amount) public virtual override returns (bool) {
+  _approve(_msgSender(), spender, amount);
+  return true;
+}
+```
+Also, since our deployed token contracts do not inherit from the draft version of [`permit`](https://eips.ethereum.org/EIPS/eip-2612), the only way to deal with this challenge is to ask the user for a high enough `allowance` for the *Forwarder* contract at the beginning of the user journey. In order to assure a replay protection, we track on-chain a `nonce` mapping. Further, to prevent anyone from broadcasting transactions that have a potential malicious intent, the *Forwarder* contract implements a whitelist for the `execute` function.
+
+## Generate the `calldata`, `signature`, `struct` Data
+Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `struct` data.
+> `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
+
+## Test Deployments
+- Rinkeby Deployment `Forwarder.sol`: [0xba5b421D415054b08b7D1CeB7F0f790c35729c48](https://rinkeby.etherscan.io/address/0xba5b421D415054b08b7D1CeB7F0f790c35729c48)
+  - First successful meta-transaction 😎: [0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217](https://rinkeby.etherscan.io/tx/0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217)
 
 => Before we can enable `transferFrom` meta-transactions for ERC20 tokens, the signer needs to call `approve` the `SimpleForwarder` contract to transfer tokens on it's behalf. This function call must be sent as a separate meta-transaction before the `transferFrom` function call to enable a successful transfer. Further checks need to be implemented who can whitelist addresses and who can execute the function `forward`.
 
-## Generate `calldata`
-Run `node scripts/web3js-calldata.js` to generate the `calldata`.
-> `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
+## TO DOS
+- Write proper unit tests.
 
 ## References
 [1] https://medium.com/coinmonks/ethereum-meta-transactions-101-de7f91884a06

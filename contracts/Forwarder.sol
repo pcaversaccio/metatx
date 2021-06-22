@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
 /**
  * @dev For general development-related debugging, we implement Hardhat's console.log. 
@@ -16,19 +17,26 @@ import "hardhat/console.sol";
  * @author Pascal Marco Caversaccio, pascal.caversaccio@hotmail.ch
  */
 
-contract Forwarder is Ownable {
+contract Forwarder is Ownable, Pausable {
     using ECDSA for bytes32;
 
     struct ForwardRequest {
         address from;       // Externally-owned account making the request.
         address to;         // Destination address, normally a smart contract.
-        uint256 value;      // Amount of Ether to transfer to the destination.
         uint256 gas;        // Amount of gas limit to set for the execution.
         uint256 nonce;      // On-chain tracked nonce of a transaction.
         bytes data;         // Calldata to be sent to the destination.
     }
 
     mapping(address => uint256) private _nonces;
+    mapping(address => bool) private senderWhitelist;
+
+    event MetaTransaction(address indexed from, address indexed to, bytes indexed data);
+
+    constructor () {
+        address msgSender = msg.sender;
+        addSenderToWhitelist(msgSender);
+    }
 
     function getNonce(address from) public view returns (uint256) {
         return _nonces[from];
@@ -38,7 +46,6 @@ contract Forwarder is Ownable {
         address signer = keccak256(abi.encode(
             req.from,
             req.to,
-            req.value,
             req.gas,
             req.nonce,
             req.data
@@ -46,12 +53,13 @@ contract Forwarder is Ownable {
         return _nonces[req.from] == req.nonce && signer == req.from;
     }
 
-    function execute(ForwardRequest calldata req, bytes calldata signature) public payable returns (bool, bytes memory) {
-        require(verify(req, signature), "AwlForwarder: signature does not match request");
+    function execute(ForwardRequest calldata req, bytes calldata signature) public whenNotPaused() returns (bool, bytes memory) {
+        require(senderWhitelist[msg.sender], "Forwarder: sender of meta-transaction is not whitelisted");
+        require(verify(req, signature), "Forwarder: signature does not match request");
         _nonces[req.from] = req.nonce + 1;
 
         // solhint-disable-next-line avoid-low-level-calls
-        (bool success, bytes memory returndata) = req.to.call{gas: req.gas, value: req.value}(req.data);
+        (bool success, bytes memory returndata) = req.to.call{gas: req.gas}(req.data);
         
         if (!success) {
             // solhint-disable-next-line no-inline-assembly
@@ -60,10 +68,12 @@ contract Forwarder is Ownable {
             revert(0, returndatasize())
             }
         }
-        
+
         // Validate that the relayer has sent enough gas for the call.
         // See https://ronan.eth.link/blog/ethereum-gas-dangers/
         assert(gasleft() > req.gas / 63);
+
+        emit MetaTransaction(req.from, req.to, req.data);
 
         return (success, returndata);
     }
@@ -72,5 +82,10 @@ contract Forwarder is Ownable {
     function killForwarder(address payable payoutAddress) public onlyOwner() {
         payoutAddress.transfer(address(this).balance);
         selfdestruct(payoutAddress);
+    }
+
+    // Only whitelisted addresses are allowed to broadcast meta-transactions.
+    function addSenderToWhitelist(address _sender) public onlyOwner() {
+      senderWhitelist[_sender] = true;
     }
 }
