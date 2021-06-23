@@ -69,6 +69,8 @@ npx hardhat test
   - Whitelisted addresses: public/private?
   - Should we allow for dubplicates in the whitelist; e.g. multiple whitelisting of the same address?
   - Possibility to remove address from whitelist?
+  - Prevent sending ETH to the contract;
+  - Whitelist allowed ERC20 tokens?
 - Elaborate on security considerations;
 - Write proper unit tests;
 
