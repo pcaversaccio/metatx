@@ -66,6 +66,9 @@ npx hardhat test
 
 ## TO DOS
 - Discuss smart contract design;
+  - Whitelisted addresses: public/private?
+  - Should we allow for dubplicates in the whitelist; e.g. multiple whitelisting of the same address?
+  - Possibility to remove address from whitelist?
 - Elaborate on security considerations;
 - Write proper unit tests;
 
