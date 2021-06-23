@@ -67,10 +67,12 @@ npx hardhat test
 ## TO DOS
 - Discuss smart contract design;
   - Whitelisted addresses: public/private?
-  - Should we allow for dubplicates in the whitelist; e.g. multiple whitelisting of the same address?
+  - Should we allow for duplicates in the whitelist; e.g. multiple whitelisting of the same address?
   - Possibility to remove address from whitelist?
   - Prevent sending ETH to the contract;
   - Whitelist allowed ERC20 tokens?
+  - Prevent DDoS attack (too many sending from user, backend signature for validation?);
+  - Check signer is always from address parameter of `transferFrom`;
 - Elaborate on security considerations;
 - Write proper unit tests;
 
