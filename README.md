@@ -69,12 +69,21 @@ npx hardhat test
   - Whitelisted addresses: public/private?
   - Should we allow for duplicates in the whitelist; e.g. multiple whitelisting of the same address?
   - Possibility to remove address from whitelist?
-  - Prevent sending ETH to the contract;
+  - Prevent sending ETH to the contract (see comment below; we need to make sure no `payable` functions are included (check `killForwarder()`));
   - Whitelist allowed ERC20 tokens?
   - Prevent DDoS attack (too many sending from user, backend signature for validation?);
   - Check signer is always from address parameter of `transferFrom`;
 - Elaborate on security considerations;
 - Write proper unit tests;
+
+### Remember That Ether Can Be Forcibly Sent to an Account
+Beware of coding an invariant that strictly checks the balance of a contract.
+
+An attacker can forcibly send ether to any account and this cannot be prevented (not even with a fallback function that does a `revert()`).
+
+The attacker can do this by creating a contract, funding it with 1 wei, and invoking `selfdestruct(victimAddress)`. No code is invoked in `victimAddress`, so it cannot be prevented. This is also true for block reward which is sent to the address of the miner, which can be any arbitrary address.
+
+Also, since contract addresses can be precomputed, ether can be sent to an address before the contract is deployed.
 
 ## References
 [1] https://medium.com/coinmonks/ethereum-meta-transactions-101-de7f91884a06
