@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 // Author: Pascal Marco Caversaccio
 // E-Mail: pascal.caversaccio@hotmail.ch
 
