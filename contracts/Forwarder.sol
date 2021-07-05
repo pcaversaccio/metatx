@@ -25,7 +25,7 @@ contract Forwarder is Ownable, Pausable, EIP712 {
         bytes data;         // (Call)data to be sent to the destination.
     }
 
-    bytes32 private constant TYPEHASH = keccak256("ForwardRequest(address from,address to,uint256 value,uint256 gas,uint256 nonce,bytes data)");
+    bytes32 private constant _TYPEHASH = keccak256("ForwardRequest(address from,address to,uint256 value,uint256 gas,uint256 nonce,bytes data)");
 
     mapping(address => uint256) private _nonces;
     mapping(address => bool) private _senderWhitelist;
@@ -34,7 +34,7 @@ contract Forwarder is Ownable, Pausable, EIP712 {
     event AddressWhitelisted(address indexed sender);
     event AddressRemovedFromWhitelist(address indexed sender);
 
-    constructor() EIP712("AwlForwarder", "1") {
+    constructor(string memory name, string memory version) EIP712(name, version) {
         address msgSender = msg.sender;
         addSenderToWhitelist(msgSender);
     }
@@ -50,7 +50,7 @@ contract Forwarder is Ownable, Pausable, EIP712 {
      */
     function verify(ForwardRequest calldata req, bytes calldata signature) public view returns (bool) {
         address signer = _hashTypedDataV4(keccak256(abi.encode(
-            TYPEHASH,
+            _TYPEHASH,
             req.from,
             req.to,
             req.value,

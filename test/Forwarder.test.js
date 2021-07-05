@@ -15,7 +15,7 @@ const version = '1';
 
 contract('Forwarder', function (accounts) {
   beforeEach(async function () {
-    this.forwarder = await Forwarder.new();
+    this.forwarder = await Forwarder.new(name, version);
     this.domain = {
       name,
       version,
