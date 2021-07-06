@@ -107,6 +107,15 @@ contract Forwarder is Ownable, Pausable, EIP712 {
         return _senderWhitelist[sender];
     }
 
+    /**
+     * @dev Returns the domain separator used in the encoding of the signature for `execute`, as defined by {EIP712}.
+     * See https://eips.ethereum.org/EIPS/eip-712
+     */
+    // solhint-disable-next-line func-name-mixedcase
+    function DOMAIN_SEPARATOR() external view returns (bytes32) {
+        return _domainSeparatorV4();
+    }
+
     /// @dev Destroys the Forwarder contract and transfers all ether to a pre-defined payout address.
     function killForwarder(address payable payoutAddress) public onlyOwner() {
         payoutAddress.transfer(address(this).balance);
