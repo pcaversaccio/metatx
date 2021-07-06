@@ -59,6 +59,10 @@ Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `
   - First successful meta-transaction 😎: [0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217](https://rinkeby.etherscan.io/tx/0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217)
 - Another Rinkeby Deployment: [0x292122Fe21Fdb9B3B84841A11fBDb574E3D09b97](https://rinkeby.etherscan.io/address/0x292122Fe21Fdb9B3B84841A11fBDb574E3D09b97);
 
+First transaction (`permit`) paid by `0x9F3f11d72d96910df008Cfe3aBA40F361D2EED03` for `0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf` to permit the Forwarder contract `0x292122Fe21Fdb9B3B84841A11fBDb574E3D09b97` to transfer 1 Säntis Gulden tokens: [0x2702c2f0b8a17f7d4a5d234587bd3fcb5afc366e4df47f3851f927583a3379ba](https://rinkeby.etherscan.io/tx/0x2702c2f0b8a17f7d4a5d234587bd3fcb5afc366e4df47f3851f927583a3379ba)
+
+Second transaction (`transferFrom`) paid by `0x9F3f11d72d96910df008Cfe3aBA40F361D2EED03` to send 0.000000000000000001 token from `0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf` to `0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1`: [0x913afcd790686a4df5a9e3e9aa3e368db806a0d7292fa893141e9f441bc4fc62](https://rinkeby.etherscan.io/tx/0x913afcd790686a4df5a9e3e9aa3e368db806a0d7292fa893141e9f441bc4fc62)
+
 ## Tests
 As the project backbone, we use the [Truffle](https://github.com/trufflesuite/truffle) development environment. However, since [Hardhat](https://hardhat.org/) implements great features for Solidity debugging like Solidity stack traces, console.log, and explicit error messages when transactions fail, we leverage Hardhat for testing: 
 ```

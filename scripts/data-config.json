@@ -1,0 +1,52 @@
+{
+    "rinkeby": {
+        "verifyingContract": "0x292122Fe21Fdb9B3B84841A11fBDb574E3D09b97",
+        "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
+        "toContract": "0x0f64069aC10c5Bcc3396b26C892A36D22CdCf5A6",
+        "gasLimit": 210000,
+        "name": "AwlForwarder",
+        "version": "1",
+        "domainSeperator": "0x8efa5321032356b75356d3d028a6aadeb251faeae6d827029ddb8b5ccffeca6c",
+        "network_id": 4
+    },
+    "ropsten": {
+        "verifyingContract": "TBD",
+        "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
+        "toContract": "TBD",
+        "gasLimit": 210000,
+        "name": "AwlForwarder",
+        "version": "1",
+        "domainSeperator": "TBD",
+        "network_id": 3
+    },
+    "kovan": {
+        "verifyingContract": "TBD",
+        "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
+        "toContract": "TBD",
+        "gasLimit": 210000,
+        "name": "AwlForwarder",
+        "version": "1",
+        "domainSeperator": "TBD",
+        "network_id": 42
+    },
+    "goerli": {
+        "verifyingContract": "TBD",
+        "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
+        "toContract": "TBD",
+        "gasLimit": 210000,
+        "name": "AwlForwarder",
+        "version": "1",
+        "domainSeperator": "TBD",
+        "network_id": 5
+    },
+    "swissdlt": {
+        "verifyingContract": "TBD",
+        "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
+        "toContract": "TBD",
+        "gasLimit": 210000,
+        "name": "AwlForwarder",
+        "version": "1",
+        "domainSeperator": "TBD",
+        "network_id": 999
+    }
+}
