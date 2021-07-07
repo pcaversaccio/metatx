@@ -2,7 +2,7 @@
   "name": "metatx",
   "version": "1.0.0",
   "license": "MIT",
-  "author": "Pascal Marco Caversaccio",
+  "author": "Pascal Marco Caversaccio, Apps with love AG",
   "description": "A smart contract for extensible meta-transaction forwarding on Ethereum.",
   "keywords": [
     "ethereum",
@@ -36,7 +36,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.appswithlove.net/tooling/metatx.git"
+    "url": "git+https://gitlab.appswithlove.net/tooling/metatx.git"
   },
   "bugs": {
     "url": "https://gitlab.appswithlove.net/tooling/metatx/-/issues"
