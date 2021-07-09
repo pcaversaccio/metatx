@@ -39,6 +39,22 @@ contract Forwarder is Ownable, Pausable, EIP712 {
         addSenderToWhitelist(msgSender);
     }
 
+    /**
+     * @dev Triggers stopped state.
+     * Requirements: The contract must not be paused.
+     */
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    /**
+     * @dev Returns to normal state.
+     * Requirements: The contract must be paused.
+     */
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
     /// @dev Retrieves the on-chain tracked nonce of an EOA making the request.
     function getNonce(address from) public view returns (uint256) {
         return _nonces[from];

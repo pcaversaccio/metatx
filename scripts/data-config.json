@@ -6,7 +6,7 @@
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeperator": "0x8efa5321032356b75356d3d028a6aadeb251faeae6d827029ddb8b5ccffeca6c",
+        "domainSeparator": "0x8efa5321032356b75356d3d028a6aadeb251faeae6d827029ddb8b5ccffeca6c",
         "network_id": 4
     },
     "ropsten": {
@@ -16,7 +16,7 @@
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeperator": "TBD",
+        "domainSeparator": "TBD",
         "network_id": 3
     },
     "kovan": {
@@ -26,7 +26,7 @@
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeperator": "TBD",
+        "domainSeparator": "TBD",
         "network_id": 42
     },
     "goerli": {
@@ -36,7 +36,7 @@
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeperator": "TBD",
+        "domainSeparator": "TBD",
         "network_id": 5
     },
     "swissdlt": {
@@ -46,7 +46,7 @@
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeperator": "TBD",
+        "domainSeparator": "TBD",
         "network_id": 999
     }
 }

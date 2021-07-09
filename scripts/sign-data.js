@@ -82,4 +82,8 @@ console.log('payableAmount (ether): ' + value, '\n');
 console.log('req (tuple): ' + '[' + '"' + from + '"' + ', ' + '"' + to + '"' + ', ' + '"' + value + '"' +
 ', ' + '"' + gas + '"' + ', ' + '"' + nonce + '"' + ', ' + '"' + data + '"' + ']', '\n');
 console.log('signature (bytes): ' + signature, '\n');
+
+// -------------------DECODE INPUT PARAMETERS FROM CALLDATA FOR TESTING------------------- //
+const decodedParams = web3.eth.abi.decodeParameters(['address', 'address', 'uint256'], '0x' + data.substr(10));
+console.assert(decodedParams[0] == owner && decodedParams[1] == toAddr && decodedParams[2] == tokenValue);
 });

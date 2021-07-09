@@ -10,8 +10,10 @@ const { expect } = require('chai');
 
 const Forwarder = artifacts.require('Forwarder');
 
-const name = 'AwlForwarder';
-const version = '1';
+const config = require('../scripts/data-config.json');
+const chain = 'rinkeby';
+const name = config[chain].name;
+const version = config[chain].version;
 
 contract('Forwarder', function (accounts) {
   beforeEach(async function () {
@@ -50,6 +52,36 @@ contract('Forwarder', function (accounts) {
         },
       ],
     };
+  });
+
+  context('whitelist', function () {
+    context('addSenderToWhitelist', function () {
+      it('success', async function () {
+        expect(await this.forwarder.addSenderToWhitelist(accounts[1]));
+      });
+      it('already whitelisted', async function () {
+        await expectRevert(this.forwarder.addSenderToWhitelist(accounts[0]),
+        'AwlForwarder: sender address is already whitelisted', 
+        );
+      });
+      it('prevents non-owners from executing', async function () {
+        await expectRevert(
+          this.forwarder.addSenderToWhitelist(accounts[2], {from: accounts[1]}),
+          'Ownable: caller is not the owner',
+        );
+      });
+    });
+    context('removeSenderFromWhitelist', function () {
+      it('success', async function () {
+        expect(await this.forwarder.removeSenderFromWhitelist(accounts[0]));
+      });
+      it('prevents non-owners from executing', async function () {
+        await expectRevert(
+          this.forwarder.removeSenderFromWhitelist(accounts[0], {from: accounts[1]}),
+          'Ownable: caller is not the owner',
+        );
+      });
+    });
   });
 
   context('with message', function () {
@@ -155,6 +187,24 @@ contract('Forwarder', function (accounts) {
         });
       });
 
+      context('invalid msg.sender', function () {
+        it('msg.sender not whitelisted', async function () {
+          await expectRevert(
+            this.forwarder.execute(this.req, this.sign, {from: accounts[1]}),
+            'AwlForwarder: sender of meta-transaction is not whitelisted',
+          );
+        });
+      });
+      context('when paused', function () {
+        it('cannot execute normal process in pause', async function () {
+          await this.forwarder.pause({from: accounts[0]});
+          await expectRevert(
+            this.forwarder.execute(this.req, this.sign, {from: accounts[1]}),
+            'Pausable: paused',
+          );
+        });
+      });
+
       context('invalid signature', function () {
         it('tampered from', async function () {
           await expectRevert(
@@ -210,6 +260,53 @@ contract('Forwarder', function (accounts) {
           );
         });
       });
+    });
+  });
+
+  context('pause', function () {
+    it('success', async function () {
+      expect(await this.forwarder.pause({from: accounts[0]}));
+    });
+    it('prevents non-owners from executing', async function () {
+      await expectRevert(
+        this.forwarder.pause({from: accounts[1]}),
+        'Ownable: caller is not the owner',
+      );
+    });
+  });
+
+  context('unpause', function () {
+    it('success', async function () {
+      await this.forwarder.pause({from: accounts[0]});
+      expect(await this.forwarder.unpause({from: accounts[0]}));
+    });
+    it('prevents non-owners from executing', async function () {
+      await this.forwarder.pause({from: accounts[0]});
+      await expectRevert(
+        this.forwarder.unpause({from: accounts[1]}),
+        'Ownable: caller is not the owner',
+      );
+    });
+  });
+  
+  context('sending ETH', function () {
+    it('prevents from sending ETH directly to the contract', async function () {
+      await expectRevert(
+        web3.eth.sendTransaction({from: accounts[0], to: this.forwarder.address, value: '1000000000000000000'}),
+        'function selector was not recognized and there\'s no fallback nor receive function',
+      );
+    });
+  });
+
+  context('killForwarder', function () {
+    it('success', async function () {
+      expect(await this.forwarder.killForwarder(accounts[0], {from: accounts[0]}));
+    });
+    it('prevents non-owners from executing', async function () {
+      await expectRevert(
+        this.forwarder.killForwarder(accounts[0], {from: accounts[1]}),
+        'Ownable: caller is not the owner',
+      );
     });
   });
 });
