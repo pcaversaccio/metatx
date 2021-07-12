@@ -83,7 +83,7 @@ As the project backbone, we use the [Truffle](https://github.com/trufflesuite/tr
 npx hardhat test
 ```
 #### Test Coverage
-This repository implements a test coverage [plugin](https://github.com/sc-forks/solidity-coverage). Simply run
+This repository implements a test coverage [plugin](https://github.com/sc-forks/solidity-coverage). Simply run:
 ```bash
 npx hardhat coverage --testfiles "test/Forwarder.test.js"
 ```
@@ -101,7 +101,10 @@ All files       |      100 |      100 |      100 |      100 |                |
 
 ### Security Considerations
 In order to assure a replay protection, we track on-chain a `nonce` mapping. Further, to prevent anyone from broadcasting transactions that have a potential malicious intent, the [`Forwarder`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) smart contract implements a whitelist for the `execute` function. Also, the smart contract is [`Ownable`](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable) which provides a basic access control mechanism, where there is an EOA (an `owner`) that is granted exclusive access to specific functions (i.e. `addSenderToWhitelist`, `removeSenderFromWhitelist`, `killForwarder`, `pause`, `unpause`). Further, the smart contract function `execute` is [`Pausable`](https://docs.openzeppelin.com/contracts/4.x/api/security#Pausable), i.e. implements an emergency stop mechanism that can be triggered by the `owner`. Eventually, as an emergency backup a `selfdestruct` operation is implemented via the function `killForwarder`.
->**Note:** It is of utmost importance that the whitelisted EOAs carefully check the encoded (user-signed) `calldata` before sending the transaction.
+> **Note 1:** It is of utmost importance that the whitelisted EOAs carefully check the encoded (user-signed) `calldata` before sending the transaction.
+
+> **Note 2:** `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
+
 #### Remember That ETH Can Be Forcibly Sent to an Account
 Beware of coding an invariant that strictly checks the balance of a contract. An attacker can forcibly send ETH to any account and this cannot be prevented (not even with a fallback function that does a `revert()`). The attacker can do this by creating a contract, funding it with 1 wei, and invoking `selfdestruct(victimAddress)`. No code is invoked in `victimAddress`, so it cannot be prevented. This is also true for block reward which is sent to the address of the miner, which can be any arbitrary address. Also, since contract addresses can be precomputed, ETH can be sent to an address before the contract is deployed.
 
@@ -112,11 +115,16 @@ The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/met
 - Kovan: [0xeb8647302b2F97653452Ce1582E046e205D515bc](https://kovan.etherscan.io/address/0xeb8647302b2F97653452Ce1582E046e205D515bc)
 - Goerli: [0x20EC414D11C2C1C9c332083284C1f99C1365A645](https://goerli.etherscan.io/address/0x20EC414D11C2C1C9c332083284C1f99C1365A645)
 
-## TBD Generate the `calldata`, `signature`, `struct` Data Using `web3.js`
-Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `struct` data.
-> `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
+## Signed Data (Input Parameters) for `permit` and `execute`
+For the `permit` function, there exists a `JS` script for every token contract repository: e.g. [Säntis Gulden](https://gitlab.appswithlove.net/saentis-gulden/saentis-gulden-token-contract/-/blob/main/scripts/sign-data.js).
 
-## Example
+For the `execute` function, simply run (assuming [Node.js](https://nodejs.org/en) is installed):
+```bash
+node scripts/web3js-calldata.js
+```
+> The first four bytes of the `calldata` for a function call specifies the function to be called. It is the first (left, high-order in big-endian) four bytes of the `keccak256` hash of the signature of the function. Thus, since 1 nibble (4 bits) can be represented by one hex digit, we have 4 bytes == 8 hex digits.
+
+## Example Transaction
 
 ## References
 [1] https://medium.com/coinmonks/ethereum-meta-transactions-101-de7f91884a06
