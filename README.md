@@ -9,7 +9,7 @@
 A *meta-transaction* is a regular Ethereum transaction which contains another transaction, the actual transaction. The actual transaction is signed by a user and then sent to an operator (e.g. smart contract) or something similar; **no gas and blockchain interaction required**. The operator takes this signed transaction and submits it to the blockchain paying for the fees himself. The contract ensures there's a valid signature on the actual transaction and then executes it:
 
 <figure align="center">
-  <img src="assets/img/metatx.png" alt="Meta-Transaction: Overview" width="50%"/>
+  <img src="assets/img/metatx_architecture.png" alt="Meta-Transaction: Overview" width="50%"/>
   <figcaption>In the case of an <a href="https://eips.ethereum.org/EIPS/eip-20" target="_blank"><em>ERC-20</em></a> transfer, the <em>Signer</em> needs to approve the <em>Proxy</em> contract to transfer tokens on its behalf.</figcaption>
 </figure>
 
