@@ -31,7 +31,7 @@ The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/met
 The implementation of the domain separator was designed to be as efficient as possible while still properly updating the chain id to protect against replay attacks on an eventual fork of the chain.
 > The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) extends the [EIP-2770](https://eips.ethereum.org/EIPS/eip-2770) implements the version of the encoding known as "v4", as implemented by the JSON RPC method [`eth_signTypedDataV4` in MetaMask](https://docs.metamask.io/guide/signing-data.html#sign-typed-data-v4).
 
-## Forwarder Contract
+## [`Forwarder`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) Contract - A Smart Contract for Extensible Meta-Transaction Forwarding on Ethereum
 The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) extends the [EIP-2770](https://eips.ethereum.org/EIPS/eip-2770) and entails the following core functions:
 
 `verify`: Verifies the signature based on typed structured data.
@@ -77,18 +77,18 @@ The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/met
   <img src="assets/img/UML_Diagram.png" alt="UML Diagram" width="40%" />
 </figure>
 
-## Unit Tests
+### Unit Tests
 As the project backbone, we use the [Truffle](https://github.com/trufflesuite/truffle) development environment. However, since [Hardhat](https://hardhat.org) implements great features for Solidity debugging like Solidity stack traces, console.log, and explicit error messages when transactions fail, we leverage Hardhat for testing: 
-```
+```bash
 npx hardhat test
 ```
-### Test Coverage
+#### Test Coverage
 This repository implements a test coverage plugin. Simply run
-```
+```bash
 npx hardhat coverage --testfiles "test/Forwarder.test.js"
 ```
 The written tests available in the file [`Forwarder.test.js`] (https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/test/Forwarder.test.js) achieve a test coverage of 100%:
-```
+```bash
 ----------------|----------|----------|----------|----------|----------------|
 File            |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
 ----------------|----------|----------|----------|----------|----------------|
@@ -99,22 +99,21 @@ All files       |      100 |      100 |      100 |      100 |                |
 ----------------|----------|----------|----------|----------|----------------|
 ```
 
-
 ## Security Considerations
 In order to assure a replay protection, we track on-chain a `nonce` mapping. Further, to prevent anyone from broadcasting transactions that have a potential malicious intent, the *Forwarder* contract implements a whitelist for the `execute` function.
 ### Remember That Ether Can Be Forcibly Sent to an Account
 Beware of coding an invariant that strictly checks the balance of a contract. An attacker can forcibly send ether to any account and this cannot be prevented (not even with a fallback function that does a `revert()`). The attacker can do this by creating a contract, funding it with 1 wei, and invoking `selfdestruct(victimAddress)`. No code is invoked in `victimAddress`, so it cannot be prevented. This is also true for block reward which is sent to the address of the miner, which can be any arbitrary address. Also, since contract addresses can be precomputed, ether can be sent to an address before the contract is deployed.
 
-## Generate the `calldata`, `signature`, `struct` Data Using `web3.js`
-Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `struct` data.
-> `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
-
-## Test Deployments
+### Test Deployments
 The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) has been deployed across all the major test networks:
 - Rinkeby: [0xDA9F0524bDbc92443797feA702eDBD10A51cD3Fd](https://rinkeby.etherscan.io/address/0xDA9F0524bDbc92443797feA702eDBD10A51cD3Fd)
 - Ropsten: [0xeD1d5e84F1d2947509923Ac55AEb538684015cb2](https://ropsten.etherscan.io/address/0xed1d5e84f1d2947509923ac55aeb538684015cb2)
 - Kovan: [0xeb8647302b2F97653452Ce1582E046e205D515bc](https://kovan.etherscan.io/address/0xeb8647302b2F97653452Ce1582E046e205D515bc)
-- Goerli: [0x20EC414D11C2C1C9c332083284C1f99C1365A645](https://goerli.etherscan.io/address/0x20EC414D11C2C1C9c332083284C1f99C1365A645) 
+- Goerli: [0x20EC414D11C2C1C9c332083284C1f99C1365A645](https://goerli.etherscan.io/address/0x20EC414D11C2C1C9c332083284C1f99C1365A645)
+
+## TBD Generate the `calldata`, `signature`, `struct` Data Using `web3.js`
+Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `struct` data.
+> `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
 
 ## References
 [1] https://medium.com/coinmonks/ethereum-meta-transactions-101-de7f91884a06
