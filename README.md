@@ -83,11 +83,11 @@ As the project backbone, we use the [Truffle](https://github.com/trufflesuite/tr
 npx hardhat test
 ```
 #### Test Coverage
-This repository implements a test coverage plugin. Simply run
+This repository implements a test coverage [plugin](https://github.com/sc-forks/solidity-coverage). Simply run
 ```bash
 npx hardhat coverage --testfiles "test/Forwarder.test.js"
 ```
-The written tests available in the file [`Forwarder.test.js`] (https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/test/Forwarder.test.js) achieve a test coverage of 100%:
+The written tests available in the file [`Forwarder.test.js`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/test/Forwarder.test.js) achieve a test coverage of 100%:
 ```bash
 ----------------|----------|----------|----------|----------|----------------|
 File            |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
