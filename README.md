@@ -6,7 +6,7 @@
 ----------------------
 
 ## Background
-A *meta-transaction* is a regular Ethereum transaction which contains another transaction, the actual transaction. The actual transaction is signed by a user and then sent to an operator (e.g. [Awl](https://appswithlove.com)) or something similar; **no gas and blockchain interaction required**. The operator takes this signed transaction and submits it to the blockchain paying for the fees himself. The contract ensures there's a valid signature on the actual transaction and then executes it:
+A *meta-transaction* is a regular Ethereum transaction which contains another transaction, the actual transaction. The actual transaction is signed by a user and then sent to an operator (e.g. smart contract) or something similar; **no gas and blockchain interaction required**. The operator takes this signed transaction and submits it to the blockchain paying for the fees himself. The contract ensures there's a valid signature on the actual transaction and then executes it:
 
 <figure align="center">
   <img src="assets/img/metatx.png" alt="Meta-Transaction: Overview" width="50%"/>
@@ -55,16 +55,14 @@ Run `node scripts/web3js-calldata.js` to generate the `calldata`, `signature`, `
 > `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
 
 ## Test Deployments
-- Rinkeby Deployment `Forwarder.sol`: [0xba5b421D415054b08b7D1CeB7F0f790c35729c48](https://rinkeby.etherscan.io/address/0xba5b421D415054b08b7D1CeB7F0f790c35729c48)
-  - First successful meta-transaction 😎: [0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217](https://rinkeby.etherscan.io/tx/0x2c5b6104c3ae092242e8f63a497111e0761c9c36785e3df8999ce7e72e918217)
-- Another Rinkeby Deployment: [0x292122Fe21Fdb9B3B84841A11fBDb574E3D09b97](https://rinkeby.etherscan.io/address/0x292122Fe21Fdb9B3B84841A11fBDb574E3D09b97);
+The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) has been deployed across all the major test networks:
+- Rinkeby: [0xDA9F0524bDbc92443797feA702eDBD10A51cD3Fd](https://rinkeby.etherscan.io/address/0xDA9F0524bDbc92443797feA702eDBD10A51cD3Fd)
+- Ropsten: [0xeD1d5e84F1d2947509923Ac55AEb538684015cb2](https://ropsten.etherscan.io/address/0xed1d5e84f1d2947509923ac55aeb538684015cb2)
+- Kovan: [0xeb8647302b2F97653452Ce1582E046e205D515bc](https://kovan.etherscan.io/address/0xeb8647302b2F97653452Ce1582E046e205D515bc)
+- Goerli: [0x20EC414D11C2C1C9c332083284C1f99C1365A645](https://goerli.etherscan.io/address/0x20EC414D11C2C1C9c332083284C1f99C1365A645) 
 
-First transaction (`permit`) paid by `0x9F3f11d72d96910df008Cfe3aBA40F361D2EED03` for `0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf` to permit the Forwarder contract `0x292122Fe21Fdb9B3B84841A11fBDb574E3D09b97` to transfer 1 Säntis Gulden tokens: [0x2702c2f0b8a17f7d4a5d234587bd3fcb5afc366e4df47f3851f927583a3379ba](https://rinkeby.etherscan.io/tx/0x2702c2f0b8a17f7d4a5d234587bd3fcb5afc366e4df47f3851f927583a3379ba)
-
-Second transaction (`transferFrom`) paid by `0x9F3f11d72d96910df008Cfe3aBA40F361D2EED03` to send 0.000000000000000001 token from `0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf` to `0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1`: [0x913afcd790686a4df5a9e3e9aa3e368db806a0d7292fa893141e9f441bc4fc62](https://rinkeby.etherscan.io/tx/0x913afcd790686a4df5a9e3e9aa3e368db806a0d7292fa893141e9f441bc4fc62)
-
-## Tests
-As the project backbone, we use the [Truffle](https://github.com/trufflesuite/truffle) development environment. However, since [Hardhat](https://hardhat.org/) implements great features for Solidity debugging like Solidity stack traces, console.log, and explicit error messages when transactions fail, we leverage Hardhat for testing: 
+## Unit Tests
+As the project backbone, we use the [Truffle](https://github.com/trufflesuite/truffle) development environment. However, since [Hardhat](https://hardhat.org) implements great features for Solidity debugging like Solidity stack traces, console.log, and explicit error messages when transactions fail, we leverage Hardhat for testing: 
 ```
 npx hardhat test
 ```
@@ -97,4 +95,4 @@ Also, since contract addresses can be precomputed, ether can be sent to an addre
 
 [3] https://docs.openzeppelin.com/contracts/4.x/api/metatx
 
-[4] https://docs.opengsn.org/
+[4] https://docs.opengsn.org

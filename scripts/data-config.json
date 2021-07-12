@@ -1,42 +1,42 @@
 {
     "rinkeby": {
-        "verifyingContract": "0x292122Fe21Fdb9B3B84841A11fBDb574E3D09b97",
+        "verifyingContract": "0xDA9F0524bDbc92443797feA702eDBD10A51cD3Fd",
         "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
         "toContract": "0x0f64069aC10c5Bcc3396b26C892A36D22CdCf5A6",
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeparator": "0x8efa5321032356b75356d3d028a6aadeb251faeae6d827029ddb8b5ccffeca6c",
+        "domainSeparator": "0x29471f6ca5dd36a7bf178d808957c2ef2364ee774a1c58c4cd065cdd8ffe4cb2",
         "network_id": 4
     },
     "ropsten": {
-        "verifyingContract": "TBD",
+        "verifyingContract": "0xeD1d5e84F1d2947509923Ac55AEb538684015cb2",
         "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
-        "toContract": "TBD",
+        "toContract": "0x9b8D4cae1277a1FB56Af4C502A28B75C935f4ff3",
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeparator": "TBD",
+        "domainSeparator": "0xe2fd10b786bf28a82f21b44cc2d480a5e9f94fb9d4bf3fd800da280b0475d71c",
         "network_id": 3
     },
     "kovan": {
-        "verifyingContract": "TBD",
+        "verifyingContract": "0xeb8647302b2F97653452Ce1582E046e205D515bc",
         "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
-        "toContract": "TBD",
+        "toContract": "0x95Ae9Af89643a60DE620727CEd783FAF609832d6",
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeparator": "TBD",
+        "domainSeparator": "0xc4b2d82ecd77ac37833dfe91b69f1f043370654a5d7f76c877c271122151ef23",
         "network_id": 42
     },
     "goerli": {
-        "verifyingContract": "TBD",
+        "verifyingContract": "0x20EC414D11C2C1C9c332083284C1f99C1365A645",
         "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
-        "toContract": "TBD",
+        "toContract": "0x8749A22918430fc598B3F48E04625B371B567F0c",
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeparator": "TBD",
+        "domainSeparator": "0x6c1234bb231fab0c771f48166ed0441b83b5f33df4543a82e99c5a695c93b6c8",
         "network_id": 5
     },
     "swissdlt": {
@@ -48,5 +48,25 @@
         "version": "1",
         "domainSeparator": "TBD",
         "network_id": 999
+    },
+    "payfoot": {
+        "verifyingContract": "TBD",
+        "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
+        "toContract": "TBD",
+        "gasLimit": 210000,
+        "name": "AwlForwarder",
+        "version": "1",
+        "domainSeparator": "TBD",
+        "network_id": 888
+    },
+    "porini": {
+        "verifyingContract": "TBD",
+        "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
+        "toContract": "TBD",
+        "gasLimit": 210000,
+        "name": "AwlForwarder",
+        "version": "1",
+        "domainSeparator": "TBD",
+        "network_id": 421
     }
 }

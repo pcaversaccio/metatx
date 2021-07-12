@@ -10,16 +10,19 @@
     },
     "rinkeby": {
         "url": "https://rinkeby.infura.io/v3",
-        "network_id": 4
-    },
-    "ropsten": {
-        "url": "https://ropsten.infura.io/v3",
-        "network_id": 3,
+        "network_id": 4,
         "network_check_timeout": 90000
     },
+    "ropsten": {
+        "url": "wss://ropsten.infura.io/ws/v3",
+        "network_id": 3,
+        "network_check_timeout": 90000,
+        "gas_price": "20000000000"
+    },
     "kovan": {
-        "url": "https://kovan.infura.io/v3",
-        "network_id": 42
+        "url": "wss://kovan.infura.io/ws/v3",
+        "network_id": 42,
+        "network_check_timeout": 90000
     },
     "goerli": {
         "url": "https://goerli.infura.io/v3",
@@ -28,5 +31,13 @@
     "swissdlt": {
         "url": "https://swissdlt.appswithlove.net/rpc",
         "network_id": 999
+    },
+    "payfoot": {
+        "url": "https://rpc.payfoot.org",
+        "network_id": 888
+    },
+    "porini": {
+        "url": "https://rpc.sustainabilitychain.ch",
+        "network_id": 421
     }
 }
