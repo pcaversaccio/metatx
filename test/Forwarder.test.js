@@ -3,7 +3,7 @@
 
 const ethSigUtil = require('eth-sig-util');
 const Wallet = require('ethereumjs-wallet').default;
-const { EIP712Domain } = require('../scripts/helper.js');
+const { EIP712Domain, domainSeparator } = require('../scripts/helper.js');
 
 const { expectRevert, constants } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
@@ -71,6 +71,7 @@ contract('Forwarder', function (accounts) {
         );
       });
     });
+
     context('removeSenderFromWhitelist', function () {
       it('success', async function () {
         expect(await this.forwarder.removeSenderFromWhitelist(accounts[0]));
@@ -80,6 +81,15 @@ contract('Forwarder', function (accounts) {
           this.forwarder.removeSenderFromWhitelist(accounts[0], {from: accounts[1]}),
           'Ownable: caller is not the owner',
         );
+      });
+    });
+
+    context('isWhitelisted', function () {
+      it('true', async function () {
+        expect(await this.forwarder.isWhitelisted(accounts[0])).to.be.equal(true);
+      });
+      it('false', async function () {
+        expect(await this.forwarder.isWhitelisted(accounts[1])).to.be.equal(false);
       });
     });
   });
@@ -178,7 +188,7 @@ contract('Forwarder', function (accounts) {
         });
 
         it('success', async function () {
-          await this.forwarder.execute(this.req, this.sign); // expect to not revert
+          await this.forwarder.execute(this.req, this.sign);
         });
 
         afterEach(async function () {
@@ -195,6 +205,7 @@ contract('Forwarder', function (accounts) {
           );
         });
       });
+
       context('when paused', function () {
         it('cannot execute normal process in pause', async function () {
           await this.forwarder.pause({from: accounts[0]});
@@ -260,6 +271,41 @@ contract('Forwarder', function (accounts) {
           );
         });
       });
+
+      context('value > ETH balance', function () {
+        beforeEach(async function () {
+          this.wallet = Wallet.generate();
+          this.sender = web3.utils.toChecksumAddress(this.wallet.getAddressString());
+          this.req = {
+            from: this.sender,
+            to: constants.ZERO_ADDRESS,
+            value: Number(await web3.eth.getBalance(this.sender) + 1),
+            gas: '100000',
+            nonce: Number(await this.forwarder.getNonce(this.sender)),
+            data: '0x',
+          };
+          this.sign = ethSigUtil.signTypedMessage(
+            this.wallet.getPrivateKey(), {
+              data: {
+                types: this.types,
+                domain: this.domain,
+                primaryType: 'ForwardRequest',
+                message: this.req,
+              },
+            },
+          );
+        });
+        it('failure', async function () {
+          await expectRevert.unspecified(this.forwarder.execute(this.req, this.sign));
+        });
+      });
+    });
+  });
+
+  context('DOMAIN_SEPARATOR', function () {
+    it('success', async function () {
+      expect(await this.forwarder.DOMAIN_SEPARATOR()).to.be.equal(
+        await domainSeparator(name, version, await web3.eth.getChainId(), this.forwarder.address));
     });
   });
 
@@ -288,7 +334,7 @@ contract('Forwarder', function (accounts) {
       );
     });
   });
-  
+
   context('sending ETH', function () {
     it('prevents from sending ETH directly to the contract', async function () {
       await expectRevert(

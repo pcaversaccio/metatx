@@ -55,6 +55,15 @@ contract Forwarder is Ownable, Pausable, EIP712 {
         _unpause();
     }
 
+    /**
+     * @dev Returns the domain separator used in the encoding of the signature for `execute`, as defined by {EIP712}.
+     * See https://eips.ethereum.org/EIPS/eip-712
+     */
+    // solhint-disable-next-line func-name-mixedcase
+    function DOMAIN_SEPARATOR() external view returns (bytes32) {
+        return _domainSeparatorV4();
+    }
+
     /// @dev Retrieves the on-chain tracked nonce of an EOA making the request.
     function getNonce(address from) public view returns (uint256) {
         return _nonces[from];
@@ -121,15 +130,6 @@ contract Forwarder is Ownable, Pausable, EIP712 {
     /// @dev Retrieves the information whether an address is whitelisted or not.
     function isWhitelisted(address sender) public view returns (bool) {
         return _senderWhitelist[sender];
-    }
-
-    /**
-     * @dev Returns the domain separator used in the encoding of the signature for `execute`, as defined by {EIP712}.
-     * See https://eips.ethereum.org/EIPS/eip-712
-     */
-    // solhint-disable-next-line func-name-mixedcase
-    function DOMAIN_SEPARATOR() external view returns (bytes32) {
-        return _domainSeparatorV4();
     }
 
     /// @dev Destroys the Forwarder contract and transfers all ether to a pre-defined payout address.
