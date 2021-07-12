@@ -1,7 +1,7 @@
 # Ethereum [`ERC-20`](https://eips.ethereum.org/EIPS/eip-20) Meta-Transaction
-<figure align="center">
+<p align="center">
   <img src="assets/img/Awl_Logo.png" alt="Awl Logo" width="30%" />
-</figure>
+</p>
 
 ----------------------
 
@@ -17,9 +17,9 @@ To resolve this challenge, we extend all deployed [`ERC-20`](https://eips.ethere
 For an improved user experience, the signed data is structured following [EIP-712](https://eips.ethereum.org/EIPS/eip-712), which already has wide spread adoption in major RPC & wallet providers.
 
 This setup leads us to the following architecture:
-<figure align="center">
+<p align="center">
   <img src="assets/img/metatx_architecture.png" alt="Meta-Transaction: Overview" width="100%"/>
-</figure>
+</p>
 
 ### [EIP-712](https://eips.ethereum.org/EIPS/eip-712) - Ethereum Typed Structured Data Hashing and Signing
 [EIP-712](https://eips.ethereum.org/EIPS/eip-712) is a standard for hashing and signing of typed structured data.
@@ -73,9 +73,9 @@ The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/met
     }
 ```
 ### UML Diagram [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) Smart Contract
-<figure align="center">
+<p align="center">
   <img src="assets/img/UML_Diagram.png" alt="UML Diagram" width="40%" />
-</figure>
+</p>
 
 ### Unit Tests
 As the project backbone, we use the [Truffle](https://github.com/trufflesuite/truffle) development environment. However, since [Hardhat](https://hardhat.org) implements great features for Solidity debugging like Solidity stack traces, console.log, and explicit error messages when transactions fail, we leverage Hardhat for testing: 
