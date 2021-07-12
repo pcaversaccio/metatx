@@ -118,7 +118,7 @@ The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/met
 ## Signed User Data (Input Parameters) for `permit` and `execute`
 For the `permit` function, there exists a `JS` script for every token contract repository: e.g. [Säntis Gulden](https://gitlab.appswithlove.net/saentis-gulden/saentis-gulden-token-contract/-/blob/main/scripts/sign-data.js). Before running this script, assure the right [configurations](https://gitlab.appswithlove.net/saentis-gulden/saentis-gulden-token-contract/-/blob/main/scripts/data-config.json) for the use case (e.g. `owner`, `spender`, `amount`, `deadline`).
 
-For the `execute` function, assure the right [configurations](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/scripts/data-config.json) for the use case (e.g. `toAddress`, `toContract`, `network_id`) and run the `JS` script [sign-data.js](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/scripts/sign-data.js) (assuming [Node.js](https://nodejs.org/en) is installed):
+For the `execute` function, first assure the right [configurations](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/scripts/data-config.json) for the use case (e.g. `toAddress`, `toContract`, `network_id`) and then run the `JS` script [sign-data.js](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/scripts/sign-data.js) (assuming [Node.js](https://nodejs.org/en) is installed):
 ```bash
 node scripts/sign-data.js
 ```
@@ -133,6 +133,7 @@ signature (bytes): 0x3ac63b6929bc4ecde0391551bad4babda3b471dbaadf9994478da2af749
 > The first four bytes of the `calldata` for a function call specifies the function to be called. It is the first (left, high-order in big-endian) four bytes of the `keccak256` hash of the signature of the function. Thus, since 1 nibble (4 bits) can be represented by one hex digit, we have 4 bytes == 8 hex digits.
 
 ## Example Transaction
+
 
 ## References
 [1] https://medium.com/coinmonks/ethereum-meta-transactions-101-de7f91884a06
