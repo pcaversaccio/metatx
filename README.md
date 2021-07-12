@@ -115,12 +115,20 @@ The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/met
 - Kovan: [0xeb8647302b2F97653452Ce1582E046e205D515bc](https://kovan.etherscan.io/address/0xeb8647302b2F97653452Ce1582E046e205D515bc)
 - Goerli: [0x20EC414D11C2C1C9c332083284C1f99C1365A645](https://goerli.etherscan.io/address/0x20EC414D11C2C1C9c332083284C1f99C1365A645)
 
-## Signed Data (Input Parameters) for `permit` and `execute`
-For the `permit` function, there exists a `JS` script for every token contract repository: e.g. [Säntis Gulden](https://gitlab.appswithlove.net/saentis-gulden/saentis-gulden-token-contract/-/blob/main/scripts/sign-data.js).
+## Signed User Data (Input Parameters) for `permit` and `execute`
+For the `permit` function, there exists a `JS` script for every token contract repository: e.g. [Säntis Gulden](https://gitlab.appswithlove.net/saentis-gulden/saentis-gulden-token-contract/-/blob/main/scripts/sign-data.js). Before running this script, assure the right [configurations](https://gitlab.appswithlove.net/saentis-gulden/saentis-gulden-token-contract/-/blob/main/scripts/data-config.json) for the use case (e.g. `owner`, `spender`, `amount`, `deadline`).
 
-For the `execute` function, simply run (assuming [Node.js](https://nodejs.org/en) is installed):
+For the `execute` function, assure the right [configurations](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/scripts/data-config.json) for the use case (e.g. `toAddress`, `toContract`, `network_id`) and run the `JS` script [sign-data.js](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/scripts/sign-data.js) (assuming [Node.js](https://nodejs.org/en) is installed):
 ```bash
-node scripts/web3js-calldata.js
+node scripts/sign-data.js
+```
+Example output:
+```bash
+payableAmount (ether): 0 
+
+req (tuple): ["0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf", "0x0f64069aC10c5Bcc3396b26C892A36D22CdCf5A6", "0", "210000", "0", "0x23b872dd0000000000000000000000003854ca47abc62a3771fe06ab45622a42c4a438cf000000000000000000000000a971eadc6dac94991d3ef3c00bc2a20894cd74f10000000000000000000000000000000000000000000000000000000000000001"]
+
+signature (bytes): 0x3ac63b6929bc4ecde0391551bad4babda3b471dbaadf9994478da2af749021097bd135f5ed41df8119a59357662a38069e1c8c7e66dcefabd46d0f7da7a250681c
 ```
 > The first four bytes of the `calldata` for a function call specifies the function to be called. It is the first (left, high-order in big-endian) four bytes of the `keccak256` hash of the signature of the function. Thus, since 1 nibble (4 bits) can be represented by one hex digit, we have 4 bytes == 8 hex digits.
 
