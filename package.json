@@ -9,11 +9,22 @@
     "blockchain",
     "solidity",
     "meta-transaction",
-    "smartcontract"
+    "smart",
+    "contract"
   ],
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.appswithlove.net/tooling/metatx.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.appswithlove.net/tooling/metatx/-/issues"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.2.0",
@@ -31,15 +42,5 @@
     "eslint": "^7.30.0",
     "hardhat": "^2.4.0",
     "solidity-coverage": "^0.7.16"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.appswithlove.net/tooling/metatx.git"
-  },
-  "bugs": {
-    "url": "https://gitlab.appswithlove.net/tooling/metatx/-/issues"
   }
 }
