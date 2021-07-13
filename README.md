@@ -28,13 +28,13 @@ The encoding specified in the EIP is very generic, and such a generic implementa
 
 The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) implements the [EIP-712](https://eips.ethereum.org/EIPS/eip-712) domain separator ([`_domainSeparatorV4`](https://docs.openzeppelin.com/contracts/4.x/api/utils#EIP712-_domainSeparatorV4--)) that is used as part of the encoding scheme, and the final step of the encoding to obtain the message digest that is then signed via [`ECDSA`](https://docs.openzeppelin.com/contracts/4.x/api/utils#ECDSA) ([`_hashTypedDataV4`](https://docs.openzeppelin.com/contracts/4.x/api/utils#EIP712-_hashTypedDataV4-bytes32-)).
 
-The [OpenZeppelin implementation](https://docs.openzeppelin.com/contracts/4.x/api/utils#EIP712) of the domain separator was designed to be as efficient as possible while still properly updating the chain id to protect against replay attacks on an eventual fork of the chain.
+The [OpenZeppelin implementation](https://docs.openzeppelin.com/contracts/4.x/api/utils#EIP712) of the domain separator was designed to be as efficient as possible while still properly updating the chain ID to protect against replay attacks on an eventual fork of the chain.
 > The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) implements the version of the encoding known as "v4", as implemented by the JSON RPC method [`eth_signTypedDataV4` in MetaMask](https://docs.metamask.io/guide/signing-data.html#sign-typed-data-v4).
 
 ## [`Forwarder`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) Contract - A Smart Contract for Extensible Meta-Transaction Forwarding on Ethereum
 The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) extends the [EIP-2770](https://eips.ethereum.org/EIPS/eip-2770) and entails the following core functions:
 
-`verify`: Verifies the signature based on typed structured data.
+- `verify`: Verifies the signature based on the typed structured data.
 ```solidity
     function verify(ForwardRequest calldata req, bytes calldata signature) public view returns (bool) {
         address signer = _hashTypedDataV4(keccak256(abi.encode(
@@ -49,7 +49,8 @@ The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/met
         return _nonces[req.from] == req.nonce && signer == req.from;
     }
 ```
-`execute`: Executes the meta-transaction via a low-level call.
+
+- `execute`: Executes the meta-transaction via a low-level call.
 ```solidity
     function execute(ForwardRequest calldata req, bytes calldata signature) public payable whenNotPaused() returns (bool, bytes memory) {
         require(_senderWhitelist[msg.sender], "AwlForwarder: sender of meta-transaction is not whitelisted");
@@ -72,21 +73,24 @@ The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/met
         return (success, returndata);
     }
 ```
+
 ### UML Diagram [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) Smart Contract
 <div align="center">
   <img src="assets/img/UML_Diagram.png" alt="UML Diagram" width="40%" />
 </div>
 
 ### Unit Tests
-As the project backbone, we use the [Truffle](https://github.com/trufflesuite/truffle) development environment. However, since [Hardhat](https://hardhat.org) implements great features for Solidity debugging like Solidity stack traces, console.log, and explicit error messages when transactions fail, we leverage Hardhat for testing: 
+As the project backbone, we use the [Truffle](https://github.com/trufflesuite/truffle) development environment. However, since [Hardhat](https://hardhat.org) implements great features for Solidity debugging like Solidity stack traces, console.log, and explicit error messages when transactions fail, we leverage [Hardhat](https://hardhat.org) for testing: 
 ```bash
 npx hardhat test
 ```
+
 #### Test Coverage
 This repository implements a test coverage [plugin](https://github.com/sc-forks/solidity-coverage). Simply run:
 ```bash
 npx hardhat coverage --testfiles "test/Forwarder.test.js"
 ```
+
 The written tests available in the file [`Forwarder.test.js`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/test/Forwarder.test.js) achieve a test coverage of 100%:
 ```bash
 ----------------|----------|----------|----------|----------|----------------|
@@ -98,6 +102,7 @@ File            |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
 All files       |      100 |      100 |      100 |      100 |                |
 ----------------|----------|----------|----------|----------|----------------|
 ```
+> **Important:** A test coverage of 100% does not mean that there are no vulnerabilities. What really counts is the quality and spectrum of the tests themselves. 
 
 ### Security Considerations
 In order to assure a replay protection, we track on-chain a `nonce` mapping. Further, to prevent anyone from broadcasting transactions that have a potential malicious intent, the [`Forwarder`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) smart contract implements a whitelist for the `execute` function. Also, the smart contract is [`Ownable`](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable) which provides a basic access control mechanism, where there is an EOA (an `owner`) that is granted exclusive access to specific functions (i.e. `addSenderToWhitelist`, `removeSenderFromWhitelist`, `killForwarder`, `pause`, `unpause`). Further, the smart contract function `execute` is [`Pausable`](https://docs.openzeppelin.com/contracts/4.x/api/security#Pausable), i.e. implements an emergency stop mechanism that can be triggered by the `owner`. Eventually, as an emergency backup a `selfdestruct` operation is implemented via the function `killForwarder`.
@@ -105,7 +110,7 @@ In order to assure a replay protection, we track on-chain a `nonce` mapping. Fur
 
 > **Note 2:** `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
 
-> **Note 3:** For the functions `addSenderToWhitelist` and `killForwarder` we do not implement a dedicated strict policy to never allow the zero address `0x0000000000000000000000000000000000000000`. The reason being that first the functions are protected by being [`Ownable`](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable) and second it can be argued though that addresses such as `0x0000000000000000000000000000000000000001` are as dangerous,  yet we don't do anything about that.
+> **Note 3:** For the functions `addSenderToWhitelist` and `killForwarder` we do not implement a dedicated strict policy to never allow the zero address `0x0000000000000000000000000000000000000000`. The reason for this is that firstly, the functions are protected by being [`Ownable`](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable) and secondly, it can be argued that addresses like `0x00000000000000000000000000000000000001` are just as dangerous, but we do nothing about it.
 
 #### Remember That ETH Can Be Forcibly Sent to an Account
 Beware of coding an invariant that strictly checks the balance of a contract. An attacker can forcibly send ETH to any account and this cannot be prevented (not even with a fallback function that does a `revert()`). The attacker can do this by creating a contract, funding it with 1 wei, and invoking `selfdestruct(victimAddress)`. No code is invoked in `victimAddress`, so it cannot be prevented. This is also true for block reward which is sent to the address of the miner, which can be any arbitrary address. Also, since contract addresses can be precomputed, ETH can be sent to an address before the contract is deployed.
@@ -124,6 +129,7 @@ For the `execute` function, first assure the right [configurations](https://gitl
 ```bash
 node scripts/sign-data.js
 ```
+
 Example output:
 ```bash
 payableAmount (ether): 0 
@@ -132,10 +138,10 @@ req (tuple): ["0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf", "0x0f64069aC10c5Bcc3
 
 signature (bytes): 0x3ac63b6929bc4ecde0391551bad4babda3b471dbaadf9994478da2af749021097bd135f5ed41df8119a59357662a38069e1c8c7e66dcefabd46d0f7da7a250681c
 ```
-> The first four bytes of the `calldata` for a function call specifies the function to be called. It is the first (left, high-order in big-endian) four bytes of the `keccak256` hash of the signature of the function. Thus, since 1 nibble (4 bits) can be represented by one hex digit, we have 4 bytes == 8 hex digits.
+> The first four bytes of the `calldata` for a function call specifies the function to be called. It is the first (left, high-order in big-endian) four bytes of the `keccak256` hash of the signature of the function. Thus, since 1 nibble (4 bits) can be represented by one hex digit, we have 4 bytes = 8 hex digits.
 
 ## Example Transaction (Rinkeby Testnet)
-- [1. Transaction](https://rinkeby.etherscan.io/tx/0xfd03d1e1f3ab54884565c88e7b948596014fb30c3a0227ba8a816577cb492b37) (`permit`): The EOA [`0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf`](https://rinkeby.etherscan.io/address/0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf) permits the [`Forwarder`](0xDA9F0524bDbc92443797feA702eDBD10A51cD3Fd) contract to spend 1 [Saentis Gulden token](https://rinkeby.etherscan.io/address/0x0f64069ac10c5bcc3396b26c892a36d22cdcf5a6) (SGD). The payer and broadcaster of this transaction is [`0x9f3f11d72d96910df008cfe3aba40f361d2eed03`](https://rinkeby.etherscan.io/address/0x9f3f11d72d96910df008cfe3aba40f361d2eed03).
+- [1. Transaction](https://rinkeby.etherscan.io/tx/0xfd03d1e1f3ab54884565c88e7b948596014fb30c3a0227ba8a816577cb492b37) (`permit`): The EOA [`0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf`](https://rinkeby.etherscan.io/address/0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf) permits the [`Forwarder`](https://rinkeby.etherscan.io/address/0xda9f0524bdbc92443797fea702edbd10a51cd3fd) contract to spend 1 [Saentis Gulden token](https://rinkeby.etherscan.io/address/0x0f64069ac10c5bcc3396b26c892a36d22cdcf5a6) (SGD). The payer and broadcaster of this transaction is [`0x9f3f11d72d96910df008cfe3aba40f361d2eed03`](https://rinkeby.etherscan.io/address/0x9f3f11d72d96910df008cfe3aba40f361d2eed03).
 - [2. Transaction](https://rinkeby.etherscan.io/tx/0xdb6fd20b4ebd8340a79bb41c70dc8bd6ef9f15ca16bd56b4defeed6f95f40af4) (`execute`): The EOA [`0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf`](https://rinkeby.etherscan.io/address/0x3854Ca47Abc62A3771fE06ab45622A42C4A438Cf) transfers the arbitrary amount (maximum possible amount would be 1 SGD) of 0.000000000000000001 SGD to another EOA [`0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1`](https://rinkeby.etherscan.io/address/0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1). The payer and broadcaster of this transaction is [`0x9f3f11d72d96910df008cfe3aba40f361d2eed03`](https://rinkeby.etherscan.io/address/0x9f3f11d72d96910df008cfe3aba40f361d2eed03).
 
 ## References
