@@ -105,6 +105,8 @@ In order to assure a replay protection, we track on-chain a `nonce` mapping. Fur
 
 > **Note 2:** `calldata` is where data from external calls to functions is stored. Functions can be called internally, e.g. from within the contract, or externally. When a function's visibility is external, only external contracts can call that function. When such an external call happens, the data of that call is stored in `calldata`.
 
+> **Note 3:** For the functions `addSenderToWhitelist` and `killForwarder` we do not implement a dedicated strict policy to never allow the zero address `0x0000000000000000000000000000000000000000`. The reason being that first the functions are protected by being [`Ownable`](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable) and second it can be argued though that addresses such as `0x0000000000000000000000000000000000000001` are as dangerous,  yet we don't do anything about that.
+
 #### Remember That ETH Can Be Forcibly Sent to an Account
 Beware of coding an invariant that strictly checks the balance of a contract. An attacker can forcibly send ETH to any account and this cannot be prevented (not even with a fallback function that does a `revert()`). The attacker can do this by creating a contract, funding it with 1 wei, and invoking `selfdestruct(victimAddress)`. No code is invoked in `victimAddress`, so it cannot be prevented. This is also true for block reward which is sent to the address of the miner, which can be any arbitrary address. Also, since contract addresses can be precomputed, ETH can be sent to an address before the contract is deployed.
 
