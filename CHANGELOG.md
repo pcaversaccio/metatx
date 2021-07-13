@@ -1,12 +1,6 @@
 # Changelog
 
-## DD-MM-YYYY
+## 13-07-2021
 
 ### Added
-TBD
-
-### Changed
-TBD
-
-### Fixed
-TBD
+- Fully-fledged smart contract repository;
