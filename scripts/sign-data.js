@@ -85,5 +85,5 @@ console.log('signature (bytes): ' + signature, '\n');
 
 // -------------------DECODE INPUT PARAMETERS FROM CALLDATA FOR TESTING------------------- //
 const decodedParams = web3.eth.abi.decodeParameters(['address', 'address', 'uint256'], '0x' + data.substr(10));
-console.assert(decodedParams[0] == owner && decodedParams[1] == toAddr && decodedParams[2] == tokenValue);
+console.assert(decodedParams[0] == ethUtil.toChecksumAddress(owner) && decodedParams[1] == ethUtil.toChecksumAddress(toAddr) && decodedParams[2] == tokenValue);
 });
