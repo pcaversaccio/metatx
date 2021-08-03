@@ -40,33 +40,33 @@
         "network_id": 5
     },
     "swissdlt": {
-        "verifyingContract": "TBD",
+        "verifyingContract": "0xA610a51559eF5Ab37B01832934cD6f9117a59782",
         "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
-        "toContract": "TBD",
+        "toContract": "0x44020AA6840E06f0caAb0Bcf6a1D8352f963dB83",
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeparator": "TBD",
+        "domainSeparator": "0x5d7852635fc2f4e863c1dc2a166387f6ac23a84541a352e1672e24b76e16bec4",
         "network_id": 999
     },
     "payfoot": {
-        "verifyingContract": "TBD",
+        "verifyingContract": "0xA610a51559eF5Ab37B01832934cD6f9117a59782",
         "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
-        "toContract": "TBD",
+        "toContract": "0x1C90008B345fA5BEf50d6AB617A1BB91cf51c41d",
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeparator": "TBD",
+        "domainSeparator": "0xbd50acb84c8094991cfb63456c94dba6aeced2f264631b79699b8b64866c1859",
         "network_id": 888
     },
     "porini": {
-        "verifyingContract": "TBD",
+        "verifyingContract": "0xA610a51559eF5Ab37B01832934cD6f9117a59782",
         "toAddress": "0xA971eADc6dac94991d3Ef3c00BC2A20894CD74F1",
-        "toContract": "TBD",
+        "toContract": "0xfEC6Ae9cA6656e534E8d2B8813718401C7823079",
         "gasLimit": 210000,
         "name": "AwlForwarder",
         "version": "1",
-        "domainSeparator": "TBD",
+        "domainSeparator": "0x82099f8f3055b893065df8fb202127b0de3a45f27e0a459ef95111d6877e4372",
         "network_id": 421
     }
 }

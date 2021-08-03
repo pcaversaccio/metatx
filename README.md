@@ -122,6 +122,15 @@ The smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/met
 - Kovan: [0xeb8647302b2F97653452Ce1582E046e205D515bc](https://kovan.etherscan.io/address/0xeb8647302b2F97653452Ce1582E046e205D515bc)
 - Goerli: [0x20EC414D11C2C1C9c332083284C1f99C1365A645](https://goerli.etherscan.io/address/0x20EC414D11C2C1C9c332083284C1f99C1365A645)
 
+Furthermore, the smart contract [`Forwarder.sol`](https://gitlab.appswithlove.net/tooling/metatx/-/blob/main/contracts/Forwarder.sol) has been deployed with the identical contract address to the following custom chains:
+- SwissDLT (`chainId = 999`): [0xA610a51559eF5Ab37B01832934cD6f9117a59782](https://swissdlt.appswithlove.net/address/0xA610a51559eF5Ab37B01832934cD6f9117a59782)
+- PayFoot (`chainId = 888`): [0xA610a51559eF5Ab37B01832934cD6f9117a59782](https://expedition.dev/address/0xA610a51559eF5Ab37B01832934cD6f9117a59782?network=PayFoot)
+- Porini / SustainabilityChain (`chainId = 421`): [0xA610a51559eF5Ab37B01832934cD6f9117a59782](https://expedition.dev/address/0xA610a51559eF5Ab37B01832934cD6f9117a59782?network=Porini)
+
+The custom chain deployments entail the following governance structure:
+- Awl Forwarder Owner: `0x0FBAd0f82a7979952e7772adB111667cb3Fbc41d`
+- Awl Paymaster (whitelisted): `0x6a6414bF7A9243D2721818CD2F2b2859285AC27C`
+
 ## Signed User Data (Input Parameters) for `permit` and `execute`
 For the `permit` function, there exists a `JS` script for every token contract repository: e.g. [Säntis Gulden](https://gitlab.appswithlove.net/saentis-gulden/saentis-gulden-token-contract/-/blob/main/scripts/sign-data.js). Before running this script, assure the right [configurations](https://gitlab.appswithlove.net/saentis-gulden/saentis-gulden-token-contract/-/blob/main/scripts/data-config.json) for the use case (e.g. `owner`, `spender`, `amount`, `deadline`).
 
